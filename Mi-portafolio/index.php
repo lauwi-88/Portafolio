@@ -4,6 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LAURIVEL VERA | Desarrolladora Web Junior</title>
+    <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+    .swiper {
+        width: 100%;
+        padding: 20px 0 50px 0;
+    }
+    
+    .swiper-slide {
+        height: auto;
+    }
+    
+    .swiper-button-next,
+    .swiper-button-prev {
+        color: #8b5cf6; /* Color morado */
+        background: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    
+    .swiper-button-next:after,
+    .swiper-button-prev:after {
+        font-size: 18px;
+    }
+    
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+        background: #8b5cf6;
+        color: white;
+    }
+    
+    .swiper-pagination-bullet {
+        background: #8b5cf6;
+    }
+    
+    .swiper-pagination-bullet-active {
+        background: #6d28d9;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .swiper-button-next,
+        .swiper-button-prev {
+            display: none;
+        }
+    }
+</style>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome -->
@@ -132,59 +181,71 @@
         </div>
     </section>
 
-    <!-- Proyectos Destacados -->
-    <section id="proyectos" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <h2 class="text-4xl font-bold text-center mb-4" data-aos="fade-up">Proyectos Destacados</h2>
-            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
-                Proyectos reales donde he aplicado mis conocimientos en desarrollo web
-            </p>
-            
-            <?php if ($result && $result->num_rows > 0): ?>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+   <!-- Proyectos Destacados - CARRUSEL -->
+<section id="proyectos" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-4" data-aos="fade-up">Proyectos Destacados</h2>
+        <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+            Desliza para ver todos mis proyectos
+        </p>
+        
+        <?php if ($result && $result->num_rows > 0): ?>
+            <!-- Swiper container -->
+            <div class="swiper proyectosSwiper">
+                <div class="swiper-wrapper">
                     <?php 
-                    $delay = 0;
+                    // Reiniciamos el puntero del resultado por si ya se usó antes
+                    $result->data_seek(0);
                     while($row = $result->fetch_assoc()): 
                     ?>
-                        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
-                            <div class="h-48 bg-gradient-to-r from-purple-500 to-pink-500 relative overflow-hidden group">
-                                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
-                                    <span class="text-white font-semibold">Ver proyecto</span>
+                        <div class="swiper-slide">
+                            <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover h-full mx-2">
+                                <div class="h-48 bg-gradient-to-r from-purple-500 to-pink-500 relative overflow-hidden group">
+                                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                                        <span class="text-white font-semibold">Ver proyecto</span>
+                                    </div>
+                                    <i class="fas fa-code absolute bottom-4 right-4 text-white text-4xl opacity-30"></i>
                                 </div>
-                                <i class="fas fa-code absolute bottom-4 right-4 text-white text-4xl opacity-30"></i>
-                            </div>
-                            <div class="p-6">
-                                <h3 class="text-2xl font-bold mb-2"><?php echo htmlspecialchars($row['titulo']); ?></h3>
-                                <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($row['descripcion']); ?></p>
-                                <div class="mb-4 flex flex-wrap gap-2">
-                                    <?php 
-                                    $tecnologias = explode(',', $row['tecnologias']);
-                                    foreach($tecnologias as $tech): 
-                                    ?>
-                                        <span class="tech-badge bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium cursor-pointer">
-                                            <?php echo trim($tech); ?>
-                                        </span>
-                                    <?php endforeach; ?>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <a href="#" class="text-purple-600 hover:text-purple-800 font-semibold inline-flex items-center group">
-                                        Ver detalles 
-                                        <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
-                                    </a>
-                                    <a href="#" class="text-gray-400 hover:text-gray-600">
-                                        <i class="fab fa-github text-2xl"></i>
-                                    </a>
+                                <div class="p-6">
+                                    <h3 class="text-2xl font-bold mb-2"><?php echo htmlspecialchars($row['titulo']); ?></h3>
+                                    <p class="text-gray-600 mb-4"><?php echo htmlspecialchars($row['descripcion']); ?></p>
+                                    <div class="mb-4 flex flex-wrap gap-2">
+                                        <?php 
+                                        $tecnologias = explode(',', $row['tecnologias']);
+                                        foreach($tecnologias as $tech): 
+                                        ?>
+                                            <span class="tech-badge bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-medium">
+                                                <?php echo trim($tech); ?>
+                                            </span>
+                                        <?php endforeach; ?>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <a href="#" class="text-purple-600 hover:text-purple-800 font-semibold inline-flex items-center group">
+                                            Ver detalles 
+                                            <i class="fas fa-arrow-right ml-2 group-hover:translate-x-2 transition"></i>
+                                        </a>
+                                        <a href="#" class="text-gray-400 hover:text-gray-600">
+                                            <i class="fab fa-github text-2xl"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    <?php 
-                    $delay += 100;
-                    endwhile; 
-                    ?>
+                    <?php endwhile; ?>
                 </div>
-            <?php endif; ?>
-        </div>
-    </section>
+                
+                <!-- Paginación (puntos) -->
+                <div class="swiper-pagination"></div>
+                
+                <!-- Botones de navegación -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        <?php else: ?>
+            <p class="text-center text-gray-500">No hay proyectos cargados en la base de datos.</p>
+        <?php endif; ?>
+    </div>
+</section>
 
     <!-- Estadísticas -->
     <section class="py-16 gradient-bg text-white">
@@ -326,5 +387,37 @@
         });
     </script>
     <script src="js/script.js"></script>
+    <!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    // Inicializar Swiper
+    var swiper = new Swiper(".proyectosSwiper", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: ".swiper-pagination",
+            clickable: true,
+        },
+        navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+        },
+        breakpoints: {
+            640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+            },
+            1024: {
+                slidesPerView: 3,
+                spaceBetween: 30,
+            },
+        },
+    });
+</script>
 </body>
 </html>
